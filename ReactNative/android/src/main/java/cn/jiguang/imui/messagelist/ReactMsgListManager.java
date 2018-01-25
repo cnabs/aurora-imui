@@ -144,15 +144,17 @@ public class ReactMsgListManager extends ViewGroupManager<PullToRefreshLayout> i
         // Use default layout
         MsgListAdapter.HoldersConfig holdersConfig = new MsgListAdapter.HoldersConfig();
         ImageLoader imageLoader = new ImageLoader() {
-            @Override
+        @Override
             public void loadAvatarImage(ImageView avatarImageView, String string) {
                 int resId = IdHelper.getDrawable(reactContext, string);
                 if (resId != 0) {
                     avatarImageView.setImageResource(resId);
                 } else {
+                    RequestOptions options = new RequestOptions();
+                    options.placeholder(IdHelper.getDrawable(reactContext, "aurora_headicon_default"));
                     Glide.with(reactContext)
                             .load(string)
-                            .placeholder(IdHelper.getDrawable(reactContext, "aurora_headicon_default"))
+                            .apply(options)
                             .into(avatarImageView);
                 }
             }
@@ -160,11 +162,13 @@ public class ReactMsgListManager extends ViewGroupManager<PullToRefreshLayout> i
             @Override
             public void loadImage(ImageView imageView, String string) {
                 // You can use other image load libraries.
+                RequestOptions options = new RequestOptions();
+                options.fitCenter();
+                options.override(400, Target.SIZE_ORIGINAL);
+                options.placeholder(IdHelper.getDrawable(reactContext, "aurora_picture_not_found"));
                 Glide.with(reactContext)
                         .load(string)
-                        .fitCenter()
-                        .placeholder(IdHelper.getDrawable(reactContext, "aurora_picture_not_found"))
-                        .override(400, Target.SIZE_ORIGINAL)
+                        .apply(options)
                         .into(imageView);
             }
         };
